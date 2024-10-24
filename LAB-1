@@ -20,3 +20,245 @@ DESC employee;
 DELETE FROM employee WHERE S_No = 2;
 
 DROP TABLE employee;
+
+
+---------------------------------------------LAB_4-----------------------------------------
+CREATE TABLE bank (
+    S_No INT PRIMARY KEY,
+    Cust_Name VARCHAR(50),
+    Acc_no INT,
+    Balance DECIMAL(15, 2),
+    Cus_Branch VARCHAR(50)
+);
+
+INSERT INTO bank VALUES (1, 'Ramesh', 12378, 100000, 'Adyar');
+INSERT INTO bank VALUES (2, 'Sam', 12367, 152500, 'Mylapore');
+INSERT INTO bank VALUES (3, 'Harish', 12345, 250000, 'Anna Salai');
+
+SELECT * FROM bank;
+
+SELECT * FROM bank WHERE Cust_Name = 'Sam';
+
+SELECT * FROM bank WHERE Balance > 150000;
+
+SELECT * FROM bank WHERE Balance BETWEEN 100000 AND 200000;
+
+UPDATE bank SET Cus_Branch = 'Poonamallee' WHERE S_No = 2;
+
+SELECT * FROM bank;
+
+__________________________________________LAB_5________________________________
+
+CREATE TABLE bank (
+    S_No INT PRIMARY KEY,
+    Cust_Name VARCHAR(50),
+    Acc_no INT,
+    Balance DECIMAL(15, 2),
+    Cus_Branch VARCHAR(50)
+);
+
+INSERT INTO bank VALUES (1, 'Ramesh', 12378, 100000, 'Adyar');
+INSERT INTO bank VALUES (2, 'Sam', 12367, 152500, 'Mylapore');
+INSERT INTO bank VALUES (3, 'Harish', 12345, 250000, 'Anna Salai');
+
+SELECT * FROM bank WHERE Balance > 100000 AND Cust_Name = 'Sam';
+
+SELECT * FROM bank WHERE Cust_Name = 'Ramesh' OR Cust_Name = 'Harish';
+
+SELECT * FROM bank WHERE (Cust_Name = 'Ramesh' OR Cust_Name = 'Sam') AND Balance > 150000;
+
+SELECT * FROM bank;
+
+DROP TABLE bank;
+
+---------------------------------5(b)--------------------------------------------------
+
+CREATE OR REPLACE PROCEDURE calculate_factorial(n IN NUMBER, result OUT NUMBER) AS
+BEGIN
+    result := 1; 
+
+    FOR i IN 1..n LOOP
+        result := result * i; 
+    END LOOP;
+END;
+/
+
+
+DECLARE
+    num NUMBER := 5; 
+    fact NUMBER;      
+BEGIN
+    calculate_factorial(num, fact); -
+    DBMS_OUTPUT.PUT_LINE('Factorial of ' || num || ' is: ' || fact); 
+END;
+/
+___________________________________LAB-6_______________________________________________________
+
+CREATE TABLE bank (
+    S_No INT PRIMARY KEY,
+    Cust_Name VARCHAR(50),
+    Acc_no INT,
+    Balance DECIMAL(15, 2),
+    Cus_Branch VARCHAR(50)
+);
+
+INSERT INTO bank VALUES (1, 'Ramesh', 12378, 100000, 'Adyar');
+INSERT INTO bank VALUES (2, 'Sam', 12367, 152500, 'Mylapore');
+INSERT INTO bank VALUES (3, 'Harish', 12345, 250000, 'Anna Salai');
+
+SELECT Cus_Branch, COUNT(*) AS NumberOfCustomers
+FROM bank
+GROUP BY Cus_Branch;
+
+SELECT * FROM bank
+ORDER BY Balance DESC;
+
+SELECT Cus_Branch, AVG(Balance) AS AverageBalance
+FROM bank
+GROUP BY Cus_Branch
+HAVING AVG(Balance) > 150000;
+
+--COMMBINE
+SELECT Cus_Branch, COUNT(*) AS NumberOfCustomers, AVG(Balance) AS AverageBalance
+FROM bank
+GROUP BY Cus_Branch
+HAVING AVG(Balance) > 150000
+ORDER BY NumberOfCustomers DESC;
+
+------------------------------- LAB-7(A)--------------------------------------------------------
+CREATE TABLE bank (
+    S_No INT PRIMARY KEY,
+    Cust_Name VARCHAR(50),
+    Acc_no INT,
+    Balance DECIMAL(15, 2),
+    Cus_Branch VARCHAR(50)
+);
+
+INSERT INTO bank VALUES (1, 'Ramesh', 12378, 100000, 'Adyar');
+INSERT INTO bank VALUES (2, 'Sam', 12367, 152500, 'Mylapore');
+INSERT INTO bank VALUES (3, 'Harish', 12345, 250000, 'Anna Salai');
+
+INSERT INTO bank (S_No, Cust_Name, Acc_no, Balance, Cus_Branch) VALUES (4, 'John', 12389, 300000, 'T Nagar');
+COMMIT;
+
+INSERT INTO bank (S_No, Cust_Name, Acc_no, Balance, Cus_Branch) VALUES (5, 'Doe', 12390, 400000, 'Velachery');
+ROLLBACK;
+
+COMMIT; 
+
+SELECT * FROM bank;
+
+DROP TABLE bank;
+
+--------------------------------(B)----------------------
+CREATE OR REPLACE PROCEDURE check_palindrome(num IN NUMBER) AS
+    original_num NUMBER := num;
+    reversed_num NUMBER := 0;
+    remainder NUMBER;
+BEGIN
+    WHILE num > 0 LOOP
+        remainder := MOD(num, 10);
+        reversed_num := reversed_num * 10 + remainder;
+        num := FLOOR(num / 10);
+    END LOOP;
+
+    IF original_num = reversed_num THEN
+        DBMS_OUTPUT.PUT_LINE(original_num || ' is a palindrome.');
+    ELSE
+        DBMS_OUTPUT.PUT_LINE(original_num || ' is not a palindrome.');
+    END IF;
+END;
+/
+
+DECLARE
+    input_number NUMBER := 121;
+BEGIN
+    check_palindrome(input_number);
+END;
+/
+
+--------------------------------------------LAB-8-------------------------------------------------------
+
+CREATE TABLE bank (
+    S_No INT PRIMARY KEY,
+    Cust_Name VARCHAR(50),
+    Acc_no INT,
+    Balance DECIMAL(15, 2),
+    Cus_Branch VARCHAR(50)
+);
+
+INSERT INTO bank VALUES (1, 'Ramesh', 12378, 100000, 'Adyar');
+INSERT INTO bank VALUES (2, 'Sam', 12367, 152500, 'Mylapore');
+INSERT INTO bank VALUES (3, 'Harish', 12345, 250000, 'Anna Salai');
+
+SELECT COUNT(*) AS TotalCustomers FROM bank;
+
+SELECT SUM(Balance) AS TotalBalance FROM bank;
+
+SELECT AVG(Balance) AS AverageBalance FROM bank;
+
+SELECT MIN(Balance) AS MinimumBalance FROM bank;
+
+SELECT MAX(Balance) AS MaximumBalance FROM bank;
+
+SELECT Cus_Branch, COUNT(*) AS NumberOfCustomers, AVG(Balance) AS AverageBalance
+FROM bank
+GROUP BY Cus_Branch;
+
+DROP TABLE bank;
+
+---------------------------------------------LAB-15------------------------------------------------------
+CREATE TABLE Sailors (
+    sid INT PRIMARY KEY,
+    sname VARCHAR(50),
+    rating INT,
+    age REAL
+);
+
+CREATE TABLE Boats (
+    bid INT PRIMARY KEY,
+    bname VARCHAR(50),
+    color VARCHAR(20)
+);
+
+CREATE TABLE Reserves (
+    sid INT,
+    bid INT,
+    day DATE,
+    PRIMARY KEY (sid, bid, day),
+    FOREIGN KEY (sid) REFERENCES Sailors(sid),
+    FOREIGN KEY (bid) REFERENCES Boats(bid)
+);
+
+INSERT INTO Sailors VALUES (1, 'John', 8, 25.0);
+INSERT INTO Sailors VALUES (2, 'Alice', 7, 22.5);
+INSERT INTO Sailors VALUES (3, 'Bob', 9, 20.0);
+INSERT INTO Sailors VALUES (4, 'Diana', 6, 28.0);
+INSERT INTO Sailors VALUES (5, 'Eve', 10, 19.0);
+
+
+
+INSERT INTO Boats VALUES(101, 'Boat A', 'Red');
+INSERT INTO Boats VALUES(102, 'Boat B', 'Blue');
+INSERT INTO Boats VALUES(103, 'Boat C', 'Green');
+
+INSERT INTO Reserves VALUES(1, 101, '2024-10-01');
+INSERT INTO Reserves VALUES(2, 101, '2024-10-02');
+INSERT INTO Reserves VALUES(3, 102, '2024-10-03');
+INSERT INTO Reserves VALUES(4, 103, '2024-10-04');
+
+SELECT DISTINCT sname
+FROM Sailors
+WHERE sid IN (SELECT sid FROM Reserves);
+
+SELECT *
+FROM Sailors
+WHERE sid IN (SELECT sid FROM Reserves WHERE bid = 101);
+
+SELECT sname, age
+FROM Sailors
+WHERE age = (SELECT MIN(age) FROM Sailors);
+
+SELECT *
+FROM Sailors
+WHERE rating > 7;
